@@ -1,0 +1,2143 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourSpace Interactive Creative Labs</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* @tweakable primary color scheme */
+        :root {
+            --primary-neon: #ff0080;
+            --secondary-cyan: #00ffff;
+            --background-dark: #0a0a0f;
+            --surface-dark: #1a1a2e;
+            --text-light: #ffffff;
+            --text-muted: #b3b3b3;
+            --accent-purple: #8b5cf6;
+            --success-green: #10b981;
+            /* @tweakable animation timing */
+            --transition-speed: 0.3s;
+            --hover-scale: 1.05;
+            /* @tweakable monetization widget styling */
+            --tip-button-radius: 20px;
+            --subscription-highlight: #ff0080;
+            /* @tweakable content spacing */
+            --content-gap: 1.5rem;
+            --profile-padding: 2rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--background-dark) 0%, #16213e 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background grid */
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,0,128,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,0,128,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            /* @tweakable navbar background opacity */
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,0,128,0.3);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary-neon), var(--secondary-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: all var(--transition-speed);
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-neon);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-neon);
+            transition: width var(--transition-speed);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        .main-container {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary-neon), var(--secondary-cyan), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.2) drop-shadow(0 0 20px rgba(255,0,128,0.5)); }
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        /* Dashboard Grid */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        /* Creator Profile Module */
+        .profile-card {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255,0,128,0.2);
+            transition: all var(--transition-speed);
+            backdrop-filter: blur(10px);
+        }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-neon);
+            box-shadow: 0 20px 40px rgba(255,0,128,0.2);
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-neon), var(--secondary-cyan));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-type {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        /* Content Feed */
+        .content-feed {
+            background: rgba(26, 26, 46, 0.6);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(0,255,255,0.2);
+        }
+
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .feed-title {
+            font-size: 1.8rem;
+            color: var(--secondary-cyan);
+        }
+
+        .vibe-filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .vibe-tag {
+            padding: 0.5rem 1rem;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid var(--accent-purple);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            font-size: 0.9rem;
+        }
+
+        .vibe-tag:hover, .vibe-tag.active {
+            background: var(--accent-purple);
+            transform: scale(var(--hover-scale));
+        }
+
+        .content-item {
+            background: rgba(16, 16, 24, 0.8);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all var(--transition-speed);
+        }
+
+        .content-item:hover {
+            border-color: var(--secondary-cyan);
+            transform: translateX(10px);
+        }
+
+        .content-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .creator-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .creator-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary-neon), var(--accent-purple));
+        }
+
+        .engagement-stats {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-muted);
+        }
+
+        .engagement-stats span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+            transition: color var(--transition-speed);
+        }
+
+        .engagement-stats span:hover {
+            color: var(--primary-neon);
+        }
+
+        /* Discovery Sidebar */
+        .discovery-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .discovery-module {
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .module-title {
+            color: var(--success-green);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .trending-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            margin-bottom: 0.5rem;
+        }
+
+        .trending-item:hover {
+            background: rgba(255,0,128,0.1);
+            transform: translateX(5px);
+        }
+
+        .trending-number {
+            color: var(--primary-neon);
+            font-weight: bold;
+            min-width: 20px;
+        }
+
+        /* Monetization Widget */
+        .tip-widget {
+            background: linear-gradient(135deg, rgba(255,0,128,0.1), rgba(139,92,246,0.1));
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--primary-neon);
+        }
+
+        .tip-amounts {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .tip-amount {
+            padding: 0.5rem 1rem;
+            background: rgba(255,0,128,0.2);
+            border: 1px solid var(--primary-neon);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            color: var(--text-light);
+        }
+
+        .tip-amount:hover {
+            background: var(--primary-neon);
+            transform: scale(var(--hover-scale));
+        }
+
+        /* AI Assistant */
+        .ai-assistant {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--accent-purple), var(--secondary-cyan));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .ai-assistant:hover {
+            transform: scale(1.2);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .main-container {
+                padding: 1rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,0,128,0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-neon);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Interactive Elements */
+        .interactive-bg {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,0,128,0.1), transparent);
+            pointer-events: none;
+            transition: all 0.1s;
+        }
+
+        /* Content Upload Zone */
+        .upload-zone {
+            border: 2px dashed var(--secondary-cyan);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            margin: 1rem 0;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--primary-neon);
+            background: rgba(255,0,128,0.05);
+        }
+
+        .upload-zone.dragover {
+            border-color: var(--success-green);
+            background: rgba(255,0,128,0.1);
+        }
+
+        /* Creation Studio Styles */
+        .creation-tool {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .creation-tool:hover {
+            background: rgba(255,0,128,0.1);
+            border-color: var(--primary-neon);
+            transform: translateY(-2px);
+        }
+
+        .creation-tool i {
+            font-size: 1.5rem;
+            color: var(--secondary-cyan);
+        }
+
+        .ai-suggestion {
+            /* @tweakable AI suggestion styling */
+            padding: 0.5rem;
+            background: rgba(139,92,246,0.1);
+            border-radius: 5px;
+            border-left: 3px solid var(--accent-purple);
+            animation: suggestionFade 0.5s ease-in;
+            /* @tweakable suggestion timing */
+            transition: all 0.3s ease;
+        }
+
+        @keyframes suggestionFade {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Live Session Indicators */
+        .live-session {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .live-session::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,0,128,0.1), transparent);
+            animation: liveGlow 2s infinite;
+        }
+
+        @keyframes liveGlow {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Enhanced Tip Widget */
+        .enhanced-tip-widget {
+            /* @tweakable tip widget enhancement */
+            background: linear-gradient(135deg, rgba(255,0,128,0.15), rgba(139,92,246,0.15));
+            border-radius: var(--tip-button-radius);
+            padding: var(--profile-padding);
+            text-align: center;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+
+        .enhanced-tip-widget::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 2px;
+            background: linear-gradient(45deg, var(--primary-neon), var(--accent-purple), var(--secondary-cyan));
+            border-radius: inherit;
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            -webkit-mask-composite: xor;
+        }
+
+        /* @tweakable content spacing */
+        .content-feed {
+            gap: var(--content-gap);
+        }
+
+        /* @tweakable profile customization controls */
+        .customization-panel {
+            background: rgba(26, 26, 46, 0.9);
+            border-radius: 15px;
+            padding: var(--profile-padding);
+            border: 1px solid rgba(255,0,128,0.3);
+            margin: var(--content-gap) 0;
+        }
+
+        .color-picker-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        /* @tweakable theme preset buttons */
+        .theme-preset {
+            padding: 0.8rem;
+            border-radius: var(--tip-button-radius);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .theme-preset:hover {
+            transform: scale(var(--hover-scale));
+            border-color: var(--primary-neon);
+        }
+    </style>
+</head>
+<body>
+    <div class="background-grid"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo">YourSpace Labs</div>
+            <ul class="nav-links">
+                <li><a href="#discover" onclick="navigateTo('discover')">Discover</a></li>
+                <li><a href="#create" onclick="navigateTo('create')">Create</a></li>
+                <li><a href="#learn" onclick="navigateTo('learn')">Learn</a></li>
+                <li><a href="#collaborate" onclick="navigateTo('collaborate')">Collaborate</a></li>
+                <li><a href="#monetize" onclick="navigateTo('monetize')">Monetize</a></li>
+            </ul>
+            <div class="user-menu">
+                <i class="fas fa-user-circle" style="font-size: 1.5rem; cursor: pointer;" onclick="navigateTo('profile')"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1>Your Creative Universe Awaits</h1>
+            <p>Where creators across all disciplines build, learn, collaborate, and monetize in an immersive, customizable space that adapts to your creative vibe.</p>
+            
+            <!-- Vibe Selector -->
+            <div class="vibe-filters">
+                <span class="vibe-tag active" data-vibe="all">All Vibes</span>
+                <span class="vibe-tag" data-vibe="chill">Chill</span>
+                <span class="vibe-tag" data-vibe="energetic">Energetic</span>
+                <span class="vibe-tag" data-vibe="dark">Dark</span>
+                <span class="vibe-tag" data-vibe="uplifting">Uplifting</span>
+                <span class="vibe-tag" data-vibe="surreal">Surreal</span>
+                <span class="vibe-tag" data-vibe="whimsical">Whimsical</span>
+            </div>
+        </section>
+
+        <!-- Dashboard -->
+        <div class="dashboard">
+            <!-- Creator Profile Section -->
+            <div class="profile-section">
+                <div class="profile-card">
+                    <div class="profile-avatar">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <div class="profile-name">Neo Artist</div>
+                    <div class="profile-type">Digital Artist & VR Creator</div>
+                    
+                    <!-- Monetization Widget -->
+                    <div class="tip-widget">
+                        <h4>Support My Art</h4>
+                        <div class="tip-amounts">
+                            <button class="tip-amount" data-amount="3">$3</button>
+                            <button class="tip-amount" data-amount="5">$5</button>
+                            <button class="tip-amount" data-amount="10">$10</button>
+                            <button class="tip-amount" data-amount="25">$25</button>
+                        </div>
+                        <button style="background: var(--success-green); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">Subscribe Monthly</button>
+                    </div>
+
+                    <!-- Upload Zone -->
+                    <div class="upload-zone" id="uploadZone">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--secondary-cyan); margin-bottom: 1rem;"></i>
+                        <p>Drop your creations here or click to upload</p>
+                        <small style="color: var(--text-muted);">Support: Images, Audio, Video, Code, 3D Models</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Feed -->
+            <div class="content-feed">
+                <div class="feed-header">
+                    <h2 class="feed-title">Creative Feed</h2>
+                    <div style="display: flex; gap: 1rem;">
+                        <button class="vibe-tag" onclick="navigateTo('collaborate')">
+                            <i class="fas fa-users"></i> Collab Mode
+                        </button>
+                        <button class="vibe-tag" onclick="navigateTo('gallery3d')">
+                            <i class="fas fa-cube"></i> 3D Gallery
+                        </button>
+                        <button class="vibe-tag" onclick="navigateTo('live')">
+                            <i class="fas fa-broadcast-tower"></i> Go Live
+                        </button>
+                        <button class="vibe-tag" onclick="navigateTo('create')">
+                            <i class="fas fa-magic"></i> Create Now
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Content Items -->
+                <div class="content-item">
+                    <div class="content-meta">
+                        <div class="creator-info">
+                            <div class="creator-avatar"></div>
+                            <span>CyberMusicist</span>
+                            <span style="color: var(--text-muted); font-size: 0.9rem;">• 2h ago</span>
+                        </div>
+                        <div class="engagement-stats">
+                            <span><i class="fas fa-heart"></i> 42</span>
+                            <span><i class="fas fa-comment"></i> 8</span>
+                            <span><i class="fas fa-share"></i> 12</span>
+                            <span><i class="fas fa-code-branch"></i> 3</span>
+                        </div>
+                    </div>
+                    <h3>Synthwave Dreams - AI Collab Track</h3>
+                    <p style="color: var(--text-muted); margin: 1rem 0;">Created this ambient synthwave piece using AI assistance. The algorithm suggested the perfect chord progression that matched my vibe! </p>
+                    
+                    <!-- Audio Player Mockup -->
+                    <div style="background: rgba(0,0,0,0.5); border-radius: 10px; padding: 1rem; display: flex; align-items: center; gap: 1rem;">
+                        <button style="background: var(--primary-neon); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <div style="flex: 1; background: rgba(255,255,255,0.1); height: 4px; border-radius: 2px; position: relative;">
+                            <div style="background: var(--secondary-cyan); height: 100%; width: 30%; border-radius: 2px;"></div>
+                        </div>
+                        <span style="color: var(--text-muted); font-size: 0.9rem;">1:23 / 4:15</span>
+                    </div>
+                    
+                    <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+                        <button class="vibe-tag" onclick="navigateTo('remix', {contentId: 'synthwave-track'})">Remix This</button>
+                        <button class="vibe-tag" onclick="navigateTo('playlist')">Add to Playlist</button>
+                        <button class="vibe-tag" onclick="navigateTo('collaborate')">Request Collab</button>
+                    </div>
+                </div>
+
+                <div class="content-item">
+                    <div class="content-meta">
+                        <div class="creator-info">
+                            <div class="creator-avatar"></div>
+                            <span>QuantumCoder</span>
+                            <span style="color: var(--text-muted); font-size: 0.9rem;">• 4h ago</span>
+                        </div>
+                        <div class="engagement-stats">
+                            <span><i class="fas fa-heart"></i> 127</span>
+                            <span><i class="fas fa-comment"></i> 23</span>
+                            <span><i class="fas fa-share"></i> 45</span>
+                            <span><i class="fas fa-code-branch"></i> 18</span>
+                        </div>
+                    </div>
+                    <h3>Interactive Particle System - WebGL</h3>
+                    <p style="color: var(--text-muted); margin: 1rem 0;">Built a mesmerizing particle system that responds to audio input. Each particle represents a frequency band and dances to the music! </p>
+                    
+                    <!-- Code Preview -->
+                    <div style="background: rgba(0,0,0,0.7); border-radius: 10px; padding: 1rem; font-family: 'Courier New', monospace; font-size: 0.9rem; border-left: 3px solid var(--secondary-cyan);">
+                        <div style="color: var(--accent-purple);">// Particle system with audio analysis</div>
+                        <div style="color: var(--text-light);">function updateParticles(audioData) {</div>
+                        <div style="color: var(--success-green); padding-left: 1rem;">particles.forEach((p, i) => {</div>
+                        <div style="color: var(--secondary-cyan); padding-left: 2rem;">p.size = audioData[i] * 2;</div>
+                        <div style="color: var(--success-green); padding-left: 1rem;">});</div>
+                        <div style="color: var(--text-light);">}</div>
+                    </div>
+                    
+                    <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+                        <button class="vibe-tag" onclick="navigateTo('code', {action: 'fork'})">Fork Code</button>
+                        <button class="vibe-tag" onclick="navigateTo('demo', {projectId: 'particle-system'})">Run Demo</button>
+                        <button class="vibe-tag" onclick="navigateTo('learn', {type: 'tutorial-request'})">Request Tutorial</button>
+                    </div>
+                </div>
+
+                <div class="content-item">
+                    <div class="content-meta">
+                        <div class="creator-info">
+                            <div class="creator-avatar"></div>
+                            <span>NeonDreamer</span>
+                            <span style="color: var(--text-muted); font-size: 0.9rem;">• 6h ago</span>
+                        </div>
+                        <div class="engagement-stats">
+                            <span><i class="fas fa-heart"></i> 89</span>
+                            <span><i class="fas fa-comment"></i> 15</span>
+                            <span><i class="fas fa-share"></i> 28</span>
+                            <span><i class="fas fa-code-branch"></i> 7</span>
+                        </div>
+                    </div>
+                    <h3>Virtual Gallery Opening Tonight!</h3>
+                    <p style="color: var(--text-muted); margin: 1rem 0;">Step into my cyberpunk art gallery in VR! Featuring 12 new pieces that blend traditional painting with glitch aesthetics. Join the virtual opening party! </p>
+                    
+                    <!-- Gallery Preview -->
+                    <div style="background: linear-gradient(45deg, rgba(255,0,128,0.2), rgba(0,255,255,0.2)); border-radius: 10px; padding: 2rem; text-align: center; border: 1px solid var(--primary-neon);">
+                        <i class="fas fa-vr-cardboard" style="font-size: 3rem; color: var(--secondary-cyan); margin-bottom: 1rem;"></i>
+                        <div style="font-size: 1.2rem; margin-bottom: 1rem;">Virtual Gallery Experience</div>
+                        <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
+                            <span style="background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 15px;"><i class="fas fa-eye"></i> 234 visitors</span>
+                            <span style="background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 15px;"><i class="fas fa-clock"></i> 8pm PST</span>
+                        </div>
+                        <button style="background: var(--primary-neon); border: none; padding: 1rem 2rem; border-radius: 25px; color: white; cursor: pointer;" onclick="navigateTo('gallery3d', {mode: 'vr'})">Enter VR Gallery</button>
+                    </div>
+                    
+                    <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+                        <button class="vibe-tag" onclick="navigateTo('events', {action: 'rsvp'})">RSVP Event</button>
+                        <button class="vibe-tag" onclick="navigateTo('share', {type: 'gallery'})">Share Gallery</button>
+                        <button class="vibe-tag" onclick="navigateTo('commission')">Commission Request</button>
+                    </div>
+                </div>
+
+                <!-- New Live Creation Studio -->
+                <div class="content-item" id="creationStudio" style="display: none;">
+                    <div class="content-meta">
+                        <div class="creator-info">
+                            <div class="creator-avatar"></div>
+                            <span>You</span>
+                            <span style="color: var(--success-green); font-size: 0.9rem;">• Creating Live</span>
+                        </div>
+                        <div class="engagement-stats">
+                            <span id="liveViewers"><i class="fas fa-eye"></i> <span class="viewer-count">0</span></span>
+                            <span><i class="fas fa-heart"></i> 0</span>
+                            <span><i class="fas fa-comment"></i> 0</span>
+                        </div>
+                    </div>
+                    <h3>Live Creation Session</h3>
+                    
+                    <!-- Creation Tools -->
+                    <div style="background: rgba(0,0,0,0.5); border-radius: 15px; padding: 1.5rem; margin: 1rem 0;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                            <div class="creation-tool" data-tool="code">
+                                <i class="fas fa-code"></i>
+                                <span>Code Editor</span>
+                            </div>
+                            <div class="creation-tool" data-tool="audio">
+                                <i class="fas fa-music"></i>
+                                <span>Audio Studio</span>
+                            </div>
+                            <div class="creation-tool" data-tool="visual">
+                                <i class="fas fa-palette"></i>
+                                <span>Visual Designer</span>
+                            </div>
+                            <div class="creation-tool" data-tool="3d">
+                                <i class="fas fa-cube"></i>
+                                <span>3D Modeler</span>
+                            </div>
+                        </div>
+                        
+                        <!-- AI Co-Creation Panel -->
+                        <div id="aiCoCreator" style="background: linear-gradient(45deg, rgba(139,92,246,0.1), rgba(0,255,255,0.1)); border-radius: 10px; padding: 1rem; border: 1px solid var(--accent-purple);">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <i class="fas fa-robot" style="font-size: 1.5rem; color: var(--accent-purple);"></i>
+                                <span style="font-weight: bold;">AI Co-Creator</span>
+                                <div style="flex: 1;"></div>
+                                <span id="aiMood" style="background: rgba(255,0,128,0.2); padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">Inspired</span>
+                            </div>
+                            <div id="aiSuggestions" style="background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; min-height: 60px;">
+                                <div class="ai-suggestion" style="margin-bottom: 0.5rem;"> Try adding some particle effects to enhance the atmosphere</div>
+                                <div class="ai-suggestion"> The current tempo could benefit from a subtle bass line</div>
+                            </div>
+                            <input type="text" id="aiPrompt" placeholder="Ask your AI co-creator anything..." style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: white;">
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <button class="vibe-tag" onclick="navigateTo('create', {action: 'save'})">Save Progress</button>
+                        <button class="vibe-tag" onclick="navigateTo('share', {type: 'live'})">Share Live</button>
+                        <button class="vibe-tag" onclick="navigateTo('collaborate', {action: 'invite'})">Invite Collab</button>
+                        <button class="vibe-tag" onclick="closeCreationStudio()">Close Studio</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Discovery Sidebar -->
+            <div class="discovery-sidebar">
+                <!-- Trending Module -->
+                <div class="discovery-module">
+                    <h3 class="module-title">
+                        <i class="fas fa-fire"></i>
+                        Trending Now
+                    </h3>
+                    <div class="trending-item">
+                        <span class="trending-number">1</span>
+                        <div>
+                            <div>AI Art Challenge</div>
+                            <small style="color: var(--text-muted);">2.3k participating</small>
+                        </div>
+                    </div>
+                    <div class="trending-item">
+                        <span class="trending-number">2</span>
+                        <div>
+                            <div>Collaborative Beat</div>
+                            <small style="color: var(--text-muted);">1.8k remixes</small>
+                        </div>
+                    </div>
+                    <div class="trending-item">
+                        <span class="trending-number">3</span>
+                        <div>
+                            <div>VR Gallery Opening</div>
+                            <small style="color: var(--text-muted);">890 attendees</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Sessions Module -->
+                <div class="discovery-module">
+                    <h3 class="module-title">
+                        <i class="fas fa-broadcast-tower"></i>
+                        Live Sessions
+                    </h3>
+                    <div class="live-session" style="background: rgba(255,0,128,0.1); border-radius: 10px; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--primary-neon);">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <div class="creator-avatar" style="width: 25px; height: 25px;"></div>
+                            <span style="font-weight: bold;">MixMaster</span>
+                            <span style="background: var(--primary-neon); color: white; padding: 0.2rem 0.5rem; border-radius: 10px; font-size: 0.7rem;">LIVE</span>
+                        </div>
+                        <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Creating a synthwave track</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="color: var(--primary-neon);"><i class="fas fa-eye"></i> 127</span>
+                            <button style="background: var(--primary-neon); border: none; padding: 0.3rem 0.8rem; border-radius: 15px; color: white; cursor: pointer; font-size: 0.8rem;" onclick="navigateTo('live', {action: 'join'})">Join</button>
+                        </div>
+                    </div>
+                    
+                    <div class="live-session" style="background: rgba(0,255,255,0.1); border-radius: 10px; padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--secondary-cyan);">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <div class="creator-avatar" style="width: 25px; height: 25px;"></div>
+                            <span style="font-weight: bold;">CodeNinja</span>
+                            <span style="background: var(--secondary-cyan); color: black; padding: 0.2rem 0.5rem; border-radius: 10px; font-size: 0.7rem;">LIVE</span>
+                        </div>
+                        <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Building a WebGL game</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="color: var(--secondary-cyan);"><i class="fas fa-eye"></i> 89</span>
+                            <button style="background: var(--secondary-cyan); border: none; padding: 0.3rem 0.8rem; border-radius: 15px; color: black; cursor: pointer; font-size: 0.8rem;" onclick="navigateTo('live', {action: 'join'})">Join</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Collaboration Requests -->
+                <div class="discovery-module">
+                    <h3 class="module-title">
+                        <i class="fas fa-handshake"></i>
+                        Collab Requests
+                    </h3>
+                    <div style="background: rgba(255,0,128,0.05); border-radius: 10px; padding: 1rem; margin-bottom: 1rem; border: 1px solid rgba(255,0,128,0.2);">
+                        <div style="font-weight: bold; margin-bottom: 0.5rem;">Game Soundtrack Needed</div>
+                        <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Looking for a composer for my indie game. Retro-futuristic vibe preferred.</div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                            <span style="background: var(--success-green); padding: 0.2rem 0.5rem; border-radius: 10px; font-size: 0.7rem;">$500-1000</span>
+                            <span style="background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 10px; font-size: 0.7rem;">Remote</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button style="background: var(--primary-neon); border: none; padding: 0.5rem 1rem; border-radius: 15px; color: white; cursor: pointer;">Accept</button>
+                            <button style="background: transparent; border: 1px solid var(--text-muted); padding: 0.5rem 1rem; border-radius: 15px; color: var(--text-muted); cursor: pointer;">View Details</button>
+                        </div>
+                    </div>
+                    
+                    <div style="background: rgba(16,185,129,0.05); border-radius: 10px; padding: 1rem; border: 1px solid rgba(16,185,129,0.2);">
+                        <div style="font-weight: bold; margin-bottom: 0.5rem;">VR Art Installation</div>
+                        <div style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Need 3D artist for immersive gallery experience.</div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                            <span style="background: var(--success-green); padding: 0.2rem 0.5rem; border-radius: 10px; font-size: 0.7rem;">$2000+</span>
+                            <span style="background: rgba(255,255,255,0.1); padding: 0.2rem 0.5rem; border-radius: 10px; font-size: 0.7rem;">Long-term</span>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button style="background: var(--success-green); border: none; padding: 0.5rem 1rem; border-radius: 15px; color: white; cursor: pointer;">Apply</button>
+                            <button style="background: transparent; border: 1px solid var(--text-muted); padding: 0.5rem 1rem; border-radius: 15px; color: var(--text-muted); cursor: pointer;">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Assistant -->
+    <div class="ai-assistant" onclick="toggleAiAssistant()">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <!-- Interactive Background Elements -->
+    <div class="interactive-bg" id="interactiveBg"></div>
+
+    <!-- Page Container for Multi-Page Support -->
+    <div id="pageContainer" style="display: none;">
+        <!-- Pages will be dynamically loaded here -->
+    </div>
+
+    <script>
+        // @tweakable interaction sensitivity
+        const MOUSE_SENSITIVITY = 0.1;
+        const ANIMATION_SPEED = 2000;
+        const MAX_PARTICLES = 20;
+        
+        /* @tweakable tip jar configuration */
+        const TIP_SETTINGS = {
+            defaultAmounts: [3, 5, 10, 25],
+            maxTipAmount: 500,
+            minimumTip: 1,
+            currency: 'USD'
+        };
+        
+        /* @tweakable profile customization limits */
+        const PROFILE_LIMITS = {
+            maxBackgroundSize: 5, // MB
+            maxGalleryItems: 50,
+            maxBioLength: 500,
+            allowedImageFormats: ['jpg', 'jpeg', 'png', 'gif', 'webp']
+        };
+        
+        /* @tweakable content discovery settings */
+        const DISCOVERY_CONFIG = {
+            trendinPeriod: 24, // hours
+            maxRecommendations: 12,
+            vibeFilterWeight: 0.7,
+            diversityBoost: 0.3
+        };
+        
+        /* @tweakable monetization features */
+        const MONETIZATION_OPTIONS = {
+            enableTips: true,
+            enableSubscriptions: true,
+            enableCommissions: true,
+            platformFeePercentage: 5,
+            payoutFrequency: 'weekly'
+        };
+        
+        /* @tweakable enhanced page navigation settings */
+        const NAVIGATION_CONFIG = {
+            transitionDuration: 600,
+            fadeOpacity: 0.15,
+            slideDistance: '30px',
+            easing: 'cubic-bezier(0.4, 0.0, 0.2, 1)',
+            enableSoundEffects: false,
+            loadingMinimumTime: 400
+        };
+
+        /* @tweakable button interaction effects */
+        const BUTTON_EFFECTS = {
+            hoverScale: 1.02,
+            clickScale: 0.96,
+            rippleEffect: true,
+            hapticFeedback: false,
+            glowIntensity: 0.8
+        };
+
+        /* @tweakable page creation settings */
+        const PAGE_CREATION_CONFIG = {
+            defaultTheme: 'creative-labs',
+            showBackButton: true,
+            enableBreadcrumbs: true,
+            autoGenerateContent: true,
+            contentAnimation: 'fade-slide'
+        };
+
+        /* @tweakable deep navigation depth and complexity */
+        const DEEP_NAVIGATION_CONFIG = {
+            maxNavigationDepth: 10,
+            generateSubPages: true,
+            enableInfiniteNavigation: true,
+            subPageComplexity: 'high',
+            navigationMemory: true
+        };
+
+        /* @tweakable floating particle system */
+        const PARTICLE_CONFIG = {
+            particleCount: 15,
+            particleLifetime: 8000,
+            particleSpeed: 0.5,
+            particleColors: ['#ff0080', '#00ffff', '#8b5cf6'],
+            enableParticleInteraction: true
+        };
+
+        /* @tweakable floating particle creation system */
+        function createFloatingParticle() {
+            if (document.querySelectorAll('.floating-particle').length >= PARTICLE_CONFIG.particleCount) return;
+            
+            const particle = document.createElement('div');
+            particle.className = 'floating-particle';
+            particle.style.cssText = `
+                position: fixed;
+                width: ${Math.random() * 6 + 2}px;
+                height: ${Math.random() * 6 + 2}px;
+                background: ${PARTICLE_CONFIG.particleColors[Math.floor(Math.random() * PARTICLE_CONFIG.particleColors.length)]};
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 100;
+                opacity: ${Math.random() * 0.8 + 0.2};
+                left: ${Math.random() * window.innerWidth}px;
+                top: ${window.innerHeight + 10}px;
+                animation: floatUp ${PARTICLE_CONFIG.particleLifetime}ms linear forwards;
+                box-shadow: 0 0 10px currentColor;
+            `;
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                if (particle.parentNode) particle.remove();
+            }, PARTICLE_CONFIG.particleLifetime);
+        }
+
+        /* @tweakable navigation home function */
+        function navigateHome() {
+            const mainContainer = document.querySelector('.main-container');
+            const pageContainer = document.getElementById('pageContainer');
+            
+            showPolishedLoadingIndicator();
+            
+            setTimeout(() => {
+                pageContainer.style.display = 'none';
+                mainContainer.style.display = 'block';
+                mainContainer.style.opacity = '1';
+                mainContainer.style.transform = 'translateY(0)';
+                
+                document.title = 'YourSpace Interactive Creative Labs';
+                history.pushState({pageId: 'home'}, 'YourSpace Interactive Creative Labs', '/');
+                
+                hidePolishedLoadingIndicator();
+                addEnhancedButtonHandlers();
+            }, NAVIGATION_CONFIG.loadingMinimumTime);
+        }
+
+        /* @tweakable enhanced navigation system with polished transitions */
+        function navigateTo(pageId, params = {}) {
+            // Add enhanced button click feedback
+            const clickedButton = event?.target;
+            if (clickedButton) {
+                animateButtonClickEnhanced(clickedButton);
+            }
+
+            // Show enhanced loading with polish
+            showPolishedLoadingIndicator();
+            
+            setTimeout(() => {
+                // Create or get page content
+                const pageContent = generatePageContent(pageId, params);
+                
+                // Enhanced page transition
+                executePolishedPageTransition(pageContent, pageId);
+                
+            }, NAVIGATION_CONFIG.loadingMinimumTime);
+        }
+
+        /* @tweakable comprehensive page content generation with deep navigation */
+        function generatePageContent(pageId, params = {}) {
+            // Enhanced page templates with comprehensive navigation
+            const pageTemplates = {
+                discover: () => generateDiscoverPage(params),
+                create: () => generateCreatePage(params),
+                learn: () => generateLearnPage(params),
+                collaborate: () => generateCollaboratePage(params),
+                monetize: () => generateMonetizePage(params),
+                profile: () => generateProfilePage(params),
+                gallery3d: () => generateGallery3dPage(params),
+                live: () => generateLivePage(params),
+                remix: () => generateRemixPage(params),
+                playlist: () => generatePlaylistPage(params),
+                demo: () => generateDemoPage(params),
+                events: () => generateEventsPage(params),
+                share: () => generateSharePage(params),
+                commission: () => generateCommissionPage(params),
+                code: () => generateCodePage(params),
+                shop: () => generateShopPage(params),
+                settings: () => generateSettingsPage(params),
+                help: () => generateHelpPage(params),
+                trending: () => generateTrendingPage(params),
+                'live-session': () => generateLiveSessionPage(params),
+                upload: () => generateUploadPage(params),
+                payment: () => generatePaymentPage(params),
+                applications: () => generateApplicationsPage(params),
+                details: () => generateDetailsPage(params),
+                explore: () => generateExplorePage(params),
+                // @tweakable additional deep navigation pages
+                'vr-gallery': () => generateDynamicPageContent('vr-gallery', params),
+                'gallery-collections': () => generateDynamicPageContent('gallery-collections', params),
+                'artist-spotlight': () => generateDynamicPageContent('artist-spotlight', params),
+                'exhibition-creator': () => generateDynamicPageContent('exhibition-creator', params),
+                'virtual-events': () => generateDynamicPageContent('virtual-events', params),
+                'curator-dashboard': () => generateDynamicPageContent('curator-dashboard', params),
+                'broadcast-studio': () => generateDynamicPageContent('broadcast-studio', params),
+                'live-viewer': () => generateDynamicPageContent('live-viewer', params),
+                'stream-scheduler': () => generateDynamicPageContent('stream-scheduler', params),
+                'live-analytics': () => generateDynamicPageContent('live-analytics', params),
+                'streaming-setup': () => generateDynamicPageContent('streaming-setup', params),
+                'audience-manager': () => generateDynamicPageContent('audience-manager', params),
+                'audio-remixer': () => generateDynamicPageContent('audio-remixer', params),
+                'visual-remixer': () => generateDynamicPageContent('visual-remixer', params),
+                'code-remixer': () => generateDynamicPageContent('code-remixer', params),
+                'collab-board': () => generateDynamicPageContent('collab-board', params),
+                'remix-gallery': () => generateDynamicPageContent('remix-gallery', params),
+                'original-content': () => generateDynamicPageContent('original-content', params),
+                'music-playlists': () => generateDynamicPageContent('music-playlists', params),
+                'art-collections': () => generateDynamicPageContent('art-collections', params),
+                'code-collections': () => generateDynamicPageContent('code-collections', params),
+                'video-series': () => generateDynamicPageContent('video-series', params),
+                'playlist-creator': () => generateDynamicPageContent('playlist-creator', params),
+                'collaborative-playlists': () => generateDynamicPageContent('collaborative-playlists', params),
+                'interactive-demos': () => generateDynamicPageContent('interactive-demos', params),
+                'code-previews': () => generateDynamicPageContent('code-previews', params),
+                'art-showcases': () => generateDynamicPageContent('art-showcases', params),
+                'music-players': () => generateDynamicPageContent('music-players', params),
+                'game-prototypes': () => generateDynamicPageContent('game-prototypes', params),
+                'vr-experiences': () => generateDynamicPageContent('vr-experiences', params)
+            };
+
+            if (pageTemplates[pageId]) {
+                return pageTemplates[pageId]();
+            }
+            
+            return generateDynamicPageContent(pageId, params);
+        }
+
+        /* @tweakable enhanced collaborate page with deep navigation */
+        function generateCollaboratePage(params = {}) {
+            return `
+                <div style="padding: 2rem; max-width: 1400px; margin: 0 auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h1 style="color: var(--success-green); font-size: 2.5rem;">Collaboration Hub</h1>
+                        <button onclick="navigateHome()" style="background: var(--primary-neon); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">← Back Home</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                        <div style="background: rgba(26, 26, 46, 0.8); border-radius: 15px; padding: 2rem; border: 1px solid var(--success-green);">
+                            <h3 style="color: var(--success-green); margin-bottom: 1rem;">🤝 Find Collaborators</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Connect with artists, musicians, developers, and creators worldwide.</p>
+                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                <button onclick="navigateTo('discover', {type: 'artists'})" style="background: var(--secondary-cyan); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; color: black; cursor: pointer;">Find Artists</button>
+                                <button onclick="navigateTo('discover', {type: 'musicians'})" style="background: var(--accent-purple); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; color: white; cursor: pointer;">Find Musicians</button>
+                                <button onclick="navigateTo('discover', {type: 'developers'})" style="background: var(--success-green); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; color: white; cursor: pointer;">Find Developers</button>
+                                <button onclick="navigateTo('applications')" style="background: var(--primary-neon); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; color: white; cursor: pointer;">View Applications</button>
+                            </div>
+                        </div>
+                        <div style="background: rgba(26, 26, 46, 0.8); border-radius: 15px; padding: 2rem; border: 1px solid var(--accent-purple);">
+                            <h3 style="color: var(--accent-purple); margin-bottom: 1rem;">🎯 Active Projects</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Join ongoing collaborative projects or start your own.</p>
+                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                <button onclick="navigateTo('remix', {type: 'music-collab'})" style="background: var(--accent-purple); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; color: white; cursor: pointer;">Music Collaboration</button>
+                                <button onclick="navigateTo('gallery3d', {mode: 'collaborative'})" style="background: var(--secondary-cyan); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; color: black; cursor: pointer;">Art Installation</button>
+                                <button onclick="navigateTo('code', {type: 'game-jam'})" style="background: var(--success-green); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; color: white; cursor: pointer;">Game Development</button>
+                                <button onclick="navigateTo('create', {mode: 'team'})" style="background: var(--primary-neon); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; color: white; cursor: pointer;">Start New Project</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: rgba(26, 26, 46, 0.6); border-radius: 20px; padding: 2rem; border: 1px solid var(--primary-neon);">
+                        <h2 style="color: var(--primary-neon); margin-bottom: 2rem;">Live Collaboration Rooms</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                            <div style="background: rgba(255,0,128,0.1); border-radius: 15px; padding: 1.5rem; border: 1px solid var(--primary-neon); cursor: pointer;" onclick="navigateTo('live-session', {room: 'art-studio'})">
+                                <h4>🎨 Art Studio</h4>
+                                <p style="color: var(--text-muted); margin: 0.5rem 0;">Collaborative digital painting</p>
+                                <span style="color: var(--primary-neon);"><i class="fas fa-users"></i> 7 active</span>
+                            </div>
+                            <div style="background: rgba(139,92,246,0.1); border-radius: 15px; padding: 1.5rem; border: 1px solid var(--accent-purple); cursor: pointer;" onclick="navigateTo('live-session', {room: 'music-lab'})">
+                                <h4>🎵 Music Lab</h4>
+                                <p style="color: var(--text-muted); margin: 0.5rem 0;">Real-time music production</p>
+                                <span style="color: var(--accent-purple);"><i class="fas fa-users"></i> 12 active</span>
+                            </div>
+                            <div style="background: rgba(0,255,255,0.1); border-radius: 15px; padding: 1.5rem; border: 1px solid var(--secondary-cyan); cursor: pointer;" onclick="navigateTo('live-session', {room: 'code-space'})">
+                                <h4>💻 Code Space</h4>
+                                <p style="color: var(--text-muted); margin: 0.5rem 0;">Pair programming sessions</p>
+                                <span style="color: var(--secondary-cyan);"><i class="fas fa-users"></i> 5 active</span>
+                            </div>
+                            <div style="background: rgba(16,185,129,0.1); border-radius: 15px; padding: 1.5rem; border: 1px solid var(--success-green); cursor: pointer;" onclick="navigateTo('live-session', {room: 'creative-lounge'})">
+                                <h4>💡 Creative Lounge</h4>
+                                <p style="color: var(--text-muted); margin: 0.5rem 0;">Brainstorming and ideation</p>
+                                <span style="color: var(--success-green);"><i class="fas fa-users"></i> 15 active</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                            <button onclick="navigateTo('live', {action: 'create-room'})" style="background: var(--primary-neon); border: none; padding: 1rem 2rem; border-radius: 15px; color: white; cursor: pointer;">Create New Room</button>
+                            <button onclick="navigateTo('events', {type: 'collaboration'})" style="background: var(--success-green); border: none; padding: 1rem 2rem; border-radius: 15px; color: white; cursor: pointer;">Collaboration Events</button>
+                            <button onclick="navigateTo('monetize', {focus: 'team-projects'})" style="background: var(--accent-purple); border: none; padding: 1rem 2rem; border-radius: 15px; color: white; cursor: pointer;">Monetize Together</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /* @tweakable enhanced monetize page with comprehensive earning options */
+        function generateMonetizePage(params = {}) {
+            return `
+                <div style="padding: 2rem; max-width: 1400px; margin: 0 auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h1 style="color: var(--success-green); font-size: 2.5rem;">Creator Monetization</h1>
+                        <button onclick="navigateHome()" style="background: var(--primary-neon); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">← Back Home</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                        <div style="background: rgba(26, 26, 46, 0.8); border-radius: 15px; padding: 2rem; border: 1px solid var(--success-green);">
+                            <h3 style="color: var(--success-green); margin-bottom: 1rem;">💰 Revenue Streams</h3>
+                            <div style="space-y: 1rem;">
+                                <div style="background: rgba(16,185,129,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem; cursor: pointer;" onclick="navigateTo('payment', {type: 'tips'})">
+                                    <h4>💝 Tips & Donations</h4>
+                                    <p style="color: var(--text-muted); font-size: 0.9rem;">One-time support from fans</p>
+                                    <span style="color: var(--success-green);">$2,340 this month</span>
+                                </div>
+                                <div style="background: rgba(139,92,246,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem; cursor: pointer;" onclick="navigateTo('payment', {type: 'subscriptions'})">
+                                    <h4>🔄 Subscriptions</h4>
+                                    <p style="color: var(--text-muted); font-size: 0.9rem;">Monthly recurring revenue</p>
+                                    <span style="color: var(--accent-purple);">47 subscribers</span>
+                                </div>
+                                <div style="background: rgba(255,0,128,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem; cursor: pointer;" onclick="navigateTo('commission')">
+                                    <h4>🎨 Commissions</h4>
+                                    <p style="color: var(--text-muted); font-size: 0.9rem;">Custom work requests</p>
+                                    <span style="color: var(--primary-neon);">5 pending requests</span>
+                                </div>
+                                <div style="background: rgba(0,255,255,0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem; cursor: pointer;" onclick="navigateTo('shop', {type: 'digital-goods'})">
+                                    <h4>🛍️ Digital Goods</h4>
+                                    <p style="color: var(--text-muted); font-size: 0.9rem;">Sell your creations</p>
+                                    <span style="color: var(--secondary-cyan);">12 products</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="background: rgba(26, 26, 46, 0.8); border-radius: 15px; padding: 2rem; border: 1px solid var(--primary-neon);">
+                            <h3 style="color: var(--primary-neon); margin-bottom: 1rem;">📊 Analytics Dashboard</h3>
+                            <div style="margin-bottom: 2rem;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                                    <span>Total Earnings</span>
+                                    <span style="color: var(--success-green); font-size: 1.5rem;">$8,234</span>
+                                </div>
+                                <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-bottom: 1rem;">
+                                    <div style="width: 78%; height: 100%; background: linear-gradient(45deg, var(--success-green), var(--secondary-cyan)); border-radius: 3px;"></div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+                                    <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                                        <div style="color: var(--secondary-cyan); font-size: 1.2rem;">342</div>
+                                        <div style="color: var(--text-muted); font-size: 0.8rem;">Supporters</div>
+                                    </div>
+                                    <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                                        <div style="color: var(--accent-purple); font-size: 1.2rem;">$24</div>
+                                        <div style="color: var(--text-muted); font-size: 0.8rem;">Avg. Tip</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                <button onclick="navigateTo('settings', {tab: 'payments'})" style="background: var(--primary-neon); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; color: white; cursor: pointer;">Payment Settings</button>
+                                <button onclick="navigateTo('details', {type: 'earnings-report'})" style="background: var(--secondary-cyan); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; color: black; cursor: pointer;">Detailed Report</button>
+                                <button onclick="navigateTo('help', {topic: 'monetization'})" style="background: var(--accent-purple); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; color: white; cursor: pointer;">Monetization Help</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: rgba(26, 26, 46, 0.6); border-radius: 20px; padding: 2rem; border: 1px solid var(--primary-neon);">
+                        <h2 style="color: var(--primary-neon); margin-bottom: 2rem;">Premium Features & Tools</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                            <div style="background: linear-gradient(135deg, rgba(255,0,128,0.1), rgba(139,92,246,0.1)); border-radius: 15px; padding: 1.5rem; border: 1px solid var(--primary-neon); cursor: pointer;" onclick="navigateTo('shop', {type: 'premium-tools'})">
+                                <h4>🔥 Premium Creator Tools</h4>
+                                <p style="color: var(--text-muted); margin: 1rem 0;">Advanced editing, AI assistance, and exclusive features</p>
+                                <span style="background: var(--primary-neon); padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">$19/month</span>
+                            </div>
+                            <div style="background: linear-gradient(135deg, rgba(0,255,255,0.1), rgba(16,185,129,0.1)); border-radius: 15px; padding: 1.5rem; border: 1px solid var(--secondary-cyan); cursor: pointer;" onclick="navigateTo('shop', {type: 'marketplace'})">
+                                <h4>🏪 Creator Marketplace</h4>
+                                <p style="color: var(--text-muted); margin: 1rem 0;">Sell assets, templates, and creative resources</p>
+                                <span style="background: var(--secondary-cyan); color: black; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">5% platform fee</span>
+                            </div>
+                            <div style="background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(255,0,128,0.1)); border-radius: 15px; padding: 1.5rem; border: 1px solid var(--accent-purple); cursor: pointer;" onclick="navigateTo('learn', {type: 'business-courses'})">
+                                <h4>📚 Creator Business Academy</h4>
+                                <p style="color: var(--text-muted); margin: 1rem 0;">Learn marketing, branding, and business skills</p>
+                                <span style="background: var(--accent-purple); padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">Free courses</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                            <button onclick="navigateTo('collaborate', {focus: 'revenue-sharing'})" style="background: var(--success-green); border: none; padding: 1rem 2rem; border-radius: 15px; color: white; cursor: pointer;">Revenue Sharing Projects</button>
+                            <button onclick="navigateTo('events', {type: 'monetization-workshops'})" style="background: var(--accent-purple); border: none; padding: 1rem 2rem; border-radius: 15px; color: white; cursor: pointer;">Monetization Workshops</button>
+                            <button onclick="navigateTo('profile', {focus: 'creator-brand'})" style="background: var(--primary-neon); border: none; padding: 1rem 2rem; border-radius: 15px; color: white; cursor: pointer;">Build Your Brand</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /* @tweakable additional page generators for deep navigation */
+        function generateApplicationsPage(params = {}) {
+            return generateEnhancedPageWithNavigation('Applications', 'fas fa-file-alt', 'var(--accent-purple)', [
+                {text: 'Pending Reviews', action: () => navigateTo('details', {type: 'pending-applications'})},
+                {text: 'Approved Projects', action: () => navigateTo('details', {type: 'approved-applications'})},
+                {text: 'Submit New Application', action: () => navigateTo('create', {type: 'application'})},
+                {text: 'Application Guidelines', action: () => navigateTo('help', {topic: 'applications'})}
+            ]);
+        }
+
+        function generateDetailsPage(params = {}) {
+            return generateEnhancedPageWithNavigation('Details', 'fas fa-info-circle', 'var(--secondary-cyan)', [
+                {text: 'View Analytics', action: () => navigateTo('monetize', {focus: 'analytics'})},
+                {text: 'Export Data', action: () => navigateTo('settings', {tab: 'data-export'})},
+                {text: 'Share Report', action: () => navigateTo('share', {type: 'analytics'})},
+                {text: 'Schedule Report', action: () => navigateTo('settings', {tab: 'automated-reports'})}
+            ]);
+        }
+
+        function generateUploadPage(params = {}) {
+            return generateEnhancedPageWithNavigation('Upload Center', 'fas fa-cloud-upload-alt', 'var(--primary-neon)', [
+                {text: 'Upload Art', action: () => navigateTo('create', {type: 'art-upload'})},
+                {text: 'Upload Music', action: () => navigateTo('create', {type: 'music-upload'})},
+                {text: 'Upload Code', action: () => navigateTo('create', {type: 'code-upload'})},
+                {text: 'Batch Upload', action: () => navigateTo('create', {type: 'batch-upload'})},
+                {text: 'Upload Settings', action: () => navigateTo('settings', {tab: 'upload-preferences'})}
+            ]);
+        }
+
+        function generatePaymentPage(params = {}) {
+            return generateEnhancedPageWithNavigation('Payment Center', 'fas fa-credit-card', 'var(--success-green)', [
+                {text: 'Process Payment', action: () => navigateTo('details', {type: 'payment-processing'})},
+                {text: 'Payment History', action: () => navigateTo('details', {type: 'payment-history'})},
+                {text: 'Refund Request', action: () => navigateTo('help', {topic: 'refunds'})},
+                {text: 'Payment Methods', action: () => navigateTo('settings', {tab: 'payment-methods'})},
+                {text: 'Billing Settings', action: () => navigateTo('settings', {tab: 'billing'})}
+            ]);
+        }
+
+        /* @tweakable enhanced page generator with comprehensive navigation options */
+        function generateEnhancedPageWithNavigation(title, icon, color, navigationOptions = []) {
+            const defaultOptions = [
+                {text: 'Explore More', action: () => navigateTo('discover')},
+                {text: 'Create Something', action: () => navigateTo('create')},
+                {text: 'View Profile', action: () => navigateTo('profile')},
+                {text: 'Settings', action: () => navigateTo('settings')}
+            ];
+            
+            const allOptions = [...navigationOptions, ...defaultOptions];
+            
+            return `
+                <div style="padding: 2rem; max-width: 1400px; margin: 0 auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; animation: slideInFromTop 0.6s ${NAVIGATION_CONFIG.easing};">
+                        <h1 style="color: ${color}; font-size: 2.5rem;">${title}</h1>
+                        <button onclick="navigateHome()" style="background: var(--primary-neon); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">← Back Home</button>
+                    </div>
+                    <div style="background: rgba(26, 26, 46, 0.8); border-radius: 20px; padding: 3rem; border: 1px solid ${color}; text-align: center; animation: slideInFromBottom 0.8s ${NAVIGATION_CONFIG.easing};">
+                        <i class="${icon}" style="font-size: 4rem; color: ${color}; margin-bottom: 2rem; animation: pulse 2s infinite;"></i>
+                        <h2 style="margin-bottom: 1.5rem; color: var(--text-light);">Welcome to ${title}!</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 3rem; line-height: 1.6; max-width: 600px; margin-left: auto; margin-right: auto;">This is your dedicated space for ${title.toLowerCase()}. Choose from the options below to continue your creative journey.</p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                            ${allOptions.map((option, index) => `
+                                <button onclick="${option.action.toString().replace('() => ', '')}" style="
+                                    background: ${index % 4 === 0 ? 'var(--primary-neon)' : index % 4 === 1 ? 'var(--secondary-cyan)' : index % 4 === 2 ? 'var(--accent-purple)' : 'var(--success-green)'};
+                                    border: none; 
+                                    padding: 1.2rem 2rem; 
+                                    border-radius: 15px; 
+                                    color: ${index % 4 === 1 ? 'black' : 'white'}; 
+                                    cursor: pointer; 
+                                    font-weight: 500; 
+                                    transition: all 0.3s; 
+                                    animation: slideInFromLeft ${1 + index * 0.2}s ${NAVIGATION_CONFIG.easing};
+                                ">${option.text}</button>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div style="margin-top: 3rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: slideInFromBottom 1.4s ${NAVIGATION_CONFIG.easing};">
+                        <button onclick="navigateTo('help', {from: '${title.toLowerCase()}'})" style="background: var(--text-muted); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">Need Help?</button>
+                        <button onclick="navigateTo('share', {content: '${title}'})" style="background: var(--accent-purple); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">Share This</button>
+                        <button onclick="navigateTo('trending', {category: '${title.toLowerCase()}'})" style="background: var(--secondary-cyan); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: black; cursor: pointer;">What's Trending</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        /* @tweakable enhanced button animation with polish */
+        function animateButtonClickEnhanced(button) {
+            if (!BUTTON_EFFECTS.rippleEffect) return;
+            
+            // Scale animation
+            button.style.transform = `scale(${BUTTON_EFFECTS.clickScale})`;
+            button.style.transition = `transform ${NAVIGATION_CONFIG.transitionDuration * 0.3}ms ${NAVIGATION_CONFIG.easing}`;
+            
+            // Enhanced ripple effect
+            const ripple = document.createElement('div');
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            
+            ripple.style.cssText = `
+                position: absolute;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(255,255,255,${BUTTON_EFFECTS.glowIntensity}) 0%, transparent 70%);
+                transform: scale(0);
+                animation: enhancedRipple ${NAVIGATION_CONFIG.transitionDuration}ms ${NAVIGATION_CONFIG.easing};
+                pointer-events: none;
+                width: ${size}px;
+                height: ${size}px;
+                left: 50%;
+                top: 50%;
+                margin-left: -${size/2}px;
+                margin-top: -${size/2}px;
+                z-index: 1000;
+            `;
+            
+            button.style.position = 'relative';
+            button.style.overflow = 'hidden';
+            button.appendChild(ripple);
+            
+            // Add CSS animation if not exists
+            if (!document.getElementById('rippleStyles')) {
+                const style = document.createElement('style');
+                style.id = 'rippleStyles';
+                style.textContent = `
+                    @keyframes enhancedRipple {
+                        0% { transform: scale(0); opacity: 1; }
+                        50% { transform: scale(0.5); opacity: 0.8; }
+                        100% { transform: scale(1); opacity: 0; }
+                    }
+                    @keyframes floatUp {
+                        0% { transform: translateY(0); opacity: 1; }
+                        100% { transform: translateY(-100vh); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            setTimeout(() => {
+                button.style.transform = `scale(${BUTTON_EFFECTS.hoverScale})`;
+                setTimeout(() => {
+                    button.style.transform = '';
+                    if (ripple.parentNode) ripple.remove();
+                }, 150);
+            }, NAVIGATION_CONFIG.transitionDuration * 0.3);
+        }
+
+        /* @tweakable polished loading indicator */
+        function showPolishedLoadingIndicator() {
+            let loader = document.getElementById('polishedLoader');
+            if (!loader) {
+                loader = document.createElement('div');
+                loader.id = 'polishedLoader';
+                loader.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    z-index: 5000;
+                    background: rgba(26, 26, 46, 0.95);
+                    backdrop-filter: blur(20px);
+                    border-radius: 20px;
+                    padding: 2rem;
+                    border: 1px solid var(--primary-neon);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 1rem;
+                    min-width: 200px;
+                `;
+                
+                loader.innerHTML = `
+                    <div class="loading-spinner" style="
+                        width: 50px;
+                        height: 50px;
+                        border: 3px solid rgba(255,0,128,0.3);
+                        border-radius: 50%;
+                        border-top-color: var(--primary-neon);
+                        animation: spin 1s linear infinite;
+                        box-shadow: 0 0 20px rgba(255,0,128,0.3);
+                    "></div>
+                    <div style="color: var(--primary-neon); font-weight: 500;">Loading Experience...</div>
+                `;
+                document.body.appendChild(loader);
+            }
+            loader.style.display = 'flex';
+            loader.style.opacity = '0';
+            loader.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            
+            setTimeout(() => {
+                loader.style.transition = `all ${NAVIGATION_CONFIG.transitionDuration * 0.5}ms ${NAVIGATION_CONFIG.easing}`;
+                loader.style.opacity = '1';
+                loader.style.transform = 'translate(-50%, -50%) scale(1)';
+            }, 10);
+        }
+
+        function hidePolishedLoadingIndicator() {
+            const loader = document.getElementById('polishedLoader');
+            if (loader) {
+                loader.style.transition = `all ${NAVIGATION_CONFIG.transitionDuration * 0.3}ms ${NAVIGATION_CONFIG.easing}`;
+                loader.style.opacity = '0';
+                loader.style.transform = 'translate(-50%, -50%) scale(0.8)';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, NAVIGATION_CONFIG.transitionDuration * 0.3);
+            }
+        }
+
+        /* @tweakable polished page transition execution */
+        function executePolishedPageTransition(pageContent, pageId) {
+            const mainContainer = document.querySelector('.main-container');
+            const pageContainer = document.getElementById('pageContainer');
+            
+            // Fade out current content
+            mainContainer.style.transition = `all ${NAVIGATION_CONFIG.transitionDuration}ms ${NAVIGATION_CONFIG.easing}`;
+            mainContainer.style.opacity = NAVIGATION_CONFIG.fadeOpacity;
+            mainContainer.style.transform = `translateY(-${NAVIGATION_CONFIG.slideDistance})`;
+            
+            setTimeout(() => {
+                // Switch content
+                mainContainer.style.display = 'none';
+                pageContainer.style.display = 'block';
+                pageContainer.innerHTML = pageContent;
+                
+                // Update browser state
+                const pageTitle = PAGES[pageId]?.title || `${pageId.charAt(0).toUpperCase() + pageId.slice(1)} - YourSpace Labs`;
+                document.title = pageTitle;
+                history.pushState({pageId}, pageTitle, `#${pageId}`);
+                
+                // Hide loading
+                hidePolishedLoadingIndicator();
+                
+                // Animate in new content
+                pageContainer.style.opacity = '0';
+                pageContainer.style.transform = `translateY(${NAVIGATION_CONFIG.slideDistance})`;
+                
+                setTimeout(() => {
+                    pageContainer.style.transition = `all ${NAVIGATION_CONFIG.transitionDuration}ms ${NAVIGATION_CONFIG.easing}`;
+                    pageContainer.style.opacity = '1';
+                    pageContainer.style.transform = 'translateY(0)';
+                    
+                    // Re-add button handlers for new page
+                    setTimeout(() => {
+                        addEnhancedButtonHandlers();
+                    }, NAVIGATION_CONFIG.transitionDuration);
+                    
+                }, 50);
+                
+            }, NAVIGATION_CONFIG.transitionDuration);
+        }
+
+        /* @tweakable enhanced button click handlers with comprehensive routing */
+        function addEnhancedButtonHandlers() {
+            document.querySelectorAll('button, .vibe-tag, .nav-links a, .user-menu, .creation-tool, .tip-amount, .trending-item, .live-session, .discovery-module, .profile-card, .content-item, .upload-zone').forEach(element => {
+                if (!element.hasAttribute('data-navigation-enhanced')) {
+                    element.setAttribute('data-navigation-enhanced', 'true');
+                    
+                    element.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        const buttonText = this.textContent.trim();
+                        const buttonClass = this.className;
+                        
+                        // Enhanced routing logic
+                        if (buttonText.includes('Back Home') || buttonText.includes('← Back')) {
+                            navigateHome();
+                        } else if (buttonText.includes('Discover') || this.href?.includes('#discover')) {
+                            navigateTo('discover');
+                        } else if (buttonText.includes('Create') || buttonClass.includes('Creation Studio') || buttonClass.includes('Create Now') || buttonClass.includes('Start Creating')) {
+                            navigateTo('create');
+                        } else if (buttonText.includes('Learn') || buttonClass.includes('Tutorial') || buttonClass.includes('Start Learning')) {
+                            navigateTo('learn');
+                        } else if (buttonText.includes('Collaborate') || buttonClass.includes('Collab') || buttonClass.includes('Find Collaborators') || buttonClass.includes('Find Artists') || buttonClass.includes('Find Musicians') || buttonClass.includes('Find Developers')) {
+                            navigateTo('collaborate');
+                        } else if (buttonText.includes('Monetize') || buttonClass.includes('Support')) {
+                            navigateTo('monetize');
+                        } else if (buttonText.includes('Profile') || this.querySelector('.fa-user-circle')) {
+                            navigateTo('profile');
+                        } else if (buttonText.includes('Gallery') || buttonClass.includes('3D')) {
+                            navigateTo('gallery3d');
+                        } else if (buttonText.includes('Live') || buttonClass.includes('Go Live')) {
+                            navigateTo('live');
+                        } else if (buttonText.includes('Remix') || buttonClass.includes('Fork')) {
+                            navigateTo('remix');
+                        } else if (buttonText.includes('Playlist')) {
+                            navigateTo('playlist');
+                        } else if (buttonText.includes('Demo') || buttonClass.includes('Run Demo')) {
+                            navigateTo('demo');
+                        } else if (buttonText.includes('Events') || buttonClass.includes('RSVP')) {
+                            navigateTo('events');
+                        } else if (buttonText.includes('Share')) {
+                            navigateTo('share');
+                        } else if (buttonText.includes('Commission')) {
+                            navigateTo('commission');
+                        } else if (buttonText.includes('Code')) {
+                            navigateTo('code');
+                        } else if (buttonText.includes('Shop') || buttonClass.includes('Store')) {
+                            navigateTo('shop');
+                        } else if (buttonText.includes('Settings')) {
+                            navigateTo('settings');
+                        } else if (buttonText.includes('Help')) {
+                            navigateTo('help');
+                        } else if (this.classList.contains('vibe-tag')) {
+                            navigateTo('explore', {vibe: buttonText.toLowerCase()});
+                        } else if (this.classList.contains('trending-item')) {
+                            navigateTo('trending', {item: buttonText.toLowerCase()});
+                        } else if (this.classList.contains('live-session')) {
+                            navigateTo('live-session');
+                        } else if (this.classList.contains('upload-zone')) {
+                            navigateTo('upload');
+                        } else if (this.classList.contains('creation-tool')) {
+                            const tool = this.getAttribute('data-tool') || 'general';
+                            navigateTo('create', {tool});
+                        } else if (this.classList.contains('tip-amount')) {
+                            navigateTo('payment', {type: 'tip', amount: this.getAttribute('data-amount')});
+                        } else {
+                            // Default fallback navigation
+                            const fallbackPage = buttonText.toLowerCase().replace(/[^a-z]/g, '') || 'explore';
+                            navigateTo(fallbackPage);
+                        }
+                    });
+                }
+            });
+        }
+
+        /* @tweakable enhanced dynamic page content generation */
+        function generateDynamicPageContent(pageId, params = {}) {
+            const pageTitle = pageId.charAt(0).toUpperCase() + pageId.slice(1);
+            
+            return `
+                <div style="padding: 2rem; max-width: 1400px; margin: 0 auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h1 style="color: var(--primary-neon); font-size: 2.5rem;">${pageTitle}</h1>
+                        <button onclick="navigateHome()" style="background: var(--primary-neon); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">← Back Home</button>
+                    </div>
+                    <div style="background: rgba(26, 26, 46, 0.8); border-radius: 20px; padding: 3rem; border: 1px solid var(--primary-neon); text-align: center; animation: slideInFromBottom 0.8s ${NAVIGATION_CONFIG.easing};">
+                        <i class="fas fa-rocket" style="font-size: 4rem; color: var(--primary-neon); margin-bottom: 2rem; animation: pulse 2s infinite;"></i>
+                        <h2 style="margin-bottom: 1.5rem; color: var(--text-light);">Welcome to ${pageTitle}!</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 3rem; line-height: 1.6; max-width: 600px; margin-left: auto; margin-right: auto;">This feature is ready to explore. Start creating and connecting!</p>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 3rem 0;">
+                            ${[
+                                {text: `${pageTitle} Dashboard`, action: () => navigateTo(`${pageId}-dashboard`)},
+                                {text: `${pageTitle} Settings`, action: () => navigateTo(`${pageId}-settings`)},
+                                {text: `${pageTitle} Analytics`, action: () => navigateTo(`${pageId}-analytics`)},
+                                {text: `${pageTitle} Community`, action: () => navigateTo(`${pageId}-community`)},
+                                {text: `${pageTitle} Tools`, action: () => navigateTo(`${pageId}-tools`)},
+                                {text: `${pageTitle} Tutorials`, action: () => navigateTo(`${pageId}-tutorials`)},
+                                {text: `Advanced ${pageTitle}`, action: () => navigateTo(`${pageId}-advanced`)},
+                                {text: `${pageTitle} Marketplace`, action: () => navigateTo(`${pageId}-marketplace`)},
+                                {text: `${pageTitle} Collaborations`, action: () => navigateTo(`${pageId}-collaborations`)},
+                                {text: `${pageTitle} History`, action: () => navigateTo(`${pageId}-history`)}
+                            ].map((option, index) => `
+                                <button onclick="${option.action.toString().replace('() => ', '')}" style="
+                                    background: ${index % 5 === 0 ? 'var(--primary-neon)' : index % 5 === 1 ? 'var(--secondary-cyan)' : index % 5 === 2 ? 'var(--accent-purple)' : index % 5 === 3 ? 'var(--success-green)' : 'linear-gradient(45deg, var(--primary-neon), var(--accent-purple))'};
+                                    border: none; 
+                                    padding: 1.5rem 2rem; 
+                                    border-radius: 15px; 
+                                    color: ${index % 5 === 1 ? 'black' : 'white'}; 
+                                    cursor: pointer; 
+                                    font-weight: 500; 
+                                    transition: all 0.3s; 
+                                    animation: slideInFromLeft ${1 + index * 0.1}s ${NAVIGATION_CONFIG.easing};
+                                    font-size: 1rem;
+                                    position: relative;
+                                    overflow: hidden;
+                                ">${option.text}</button>
+                            `).join('')}
+                        </div>
+                        
+                        <div style="margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, rgba(255,0,128,0.1), rgba(0,255,255,0.1)); border-radius: 15px; border: 1px solid rgba(255,0,128,0.3);">
+                            <h3 style="color: var(--secondary-cyan); margin-bottom: 1rem;">Quick Actions for ${pageTitle}</h3>
+                            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                                <button onclick="navigateTo('create', {context: '${pageId}'})" style="background: var(--success-green); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">Create New</button>
+                                <button onclick="navigateTo('discover', {filter: '${pageId}'})" style="background: var(--accent-purple); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">Discover Similar</button>
+                                <button onclick="navigateTo('share', {content: '${pageId}'})" style="background: var(--secondary-cyan); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: black; cursor: pointer;">Share Experience</button>
+                                <button onclick="navigateTo('collaborate', {type: '${pageId}'})" style="background: var(--primary-neon); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">Find Collaborators</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 3rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; animation: slideInFromBottom 1.4s ${NAVIGATION_CONFIG.easing};">
+                        <button onclick="navigateTo('help', {topic: '${pageId}'})" style="background: var(--text-muted); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">Need Help?</button>
+                        <button onclick="navigateTo('tutorial-center', {subject: '${pageId}'})" style="background: var(--accent-purple); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">Learn More</button>
+                        <button onclick="navigateTo('community-forum', {topic: '${pageId}'})" style="background: var(--secondary-cyan); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: black; cursor: pointer;">Join Discussion</button>
+                        <button onclick="navigateTo('trending', {category: '${pageId}'})" style="background: var(--success-green); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">See What's Trending</button>
+                    </div>
+                </div>
+                
+                <style>
+                    @keyframes slideInFromTop {
+                        from { opacity: 0; transform: translateY(-30px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                    @keyframes slideInFromBottom {
+                        from { opacity: 0; transform: translateY(30px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                    @keyframes slideInFromLeft {
+                        from { opacity: 0; transform: translateX(-20px); }
+                        to { opacity: 1; transform: translateX(0); }
+                    }
+                    @keyframes slideInFromRight {
+                        from { opacity: 0; transform: translateX(20px); }
+                        to { opacity: 1; transform: translateX(0); }
+                    }
+                    @keyframes pulse {
+                        0%, 100% { transform: scale(1); }
+                        50% { transform: scale(1.1); }
+                    }
+                    @keyframes floatUp {
+                        0% { transform: translateY(0); opacity: 1; }
+                        100% { transform: translateY(-100vh); opacity: 0; }
+                    }
+                </style>
+            `;
+        }
+
+        /* @tweakable navigation system that ensures every click leads to meaningful content */
+        function generatePageContent(pageId, params = {}) {
+            // Enhanced page templates with comprehensive navigation
+            const pageTemplates = {
+                discover: () => generateDiscoverPage(params),
+                create: () => generateCreatePage(params),
+                learn: () => generateLearnPage(params),
+                collaborate: () => generateCollaboratePage(params),
+                monetize: () => generateMonetizePage(params),
+                profile: () => generateProfilePage(params),
+                gallery3d: () => generateGallery3dPage(params),
+                live: () => generateLivePage(params),
+                remix: () => generateRemixPage(params),
+                playlist: () => generatePlaylistPage(params),
+                demo: () => generateDemoPage(params),
+                events: () => generateEventsPage(params),
+                share: () => generateSharePage(params),
+                commission: () => generateCommissionPage(params),
+                code: () => generateCodePage(params),
+                shop: () => generateShopPage(params),
+                settings: () => generateSettingsPage(params),
+                help: () => generateHelpPage(params),
+                trending: () => generateTrendingPage(params),
+                'live-session': () => generateLiveSessionPage(params),
+                upload: () => generateUploadPage(params),
+                payment: () => generatePaymentPage(params),
+                applications: () => generateApplicationsPage(params),
+                details: () => generateDetailsPage(params),
+                explore: () => generateExplorePage(params),
+                // @tweakable additional deep navigation pages
+                'vr-gallery': () => generateDynamicPageContent('vr-gallery', params),
+                'gallery-collections': () => generateDynamicPageContent('gallery-collections', params),
+                'artist-spotlight': () => generateDynamicPageContent('artist-spotlight', params),
+                'exhibition-creator': () => generateDynamicPageContent('exhibition-creator', params),
+                'virtual-events': () => generateDynamicPageContent('virtual-events', params),
+                'curator-dashboard': () => generateDynamicPageContent('curator-dashboard', params),
+                'broadcast-studio': () => generateDynamicPageContent('broadcast-studio', params),
+                'live-viewer': () => generateDynamicPageContent('live-viewer', params),
+                'stream-scheduler': () => generateDynamicPageContent('stream-scheduler', params),
+                'live-analytics': () => generateDynamicPageContent('live-analytics', params),
+                'streaming-setup': () => generateDynamicPageContent('streaming-setup', params),
+                'audience-manager': () => generateDynamicPageContent('audience-manager', params),
+                'audio-remixer': () => generateDynamicPageContent('audio-remixer', params),
+                'visual-remixer': () => generateDynamicPageContent('visual-remixer', params),
+                'code-remixer': () => generateDynamicPageContent('code-remixer', params),
+                'collab-board': () => generateDynamicPageContent('collab-board', params),
+                'remix-gallery': () => generateDynamicPageContent('remix-gallery', params),
+                'original-content': () => generateDynamicPageContent('original-content', params),
+                'music-playlists': () => generateDynamicPageContent('music-playlists', params),
+                'art-collections': () => generateDynamicPageContent('art-collections', params),
+                'code-collections': () => generateDynamicPageContent('code-collections', params),
+                'video-series': () => generateDynamicPageContent('video-series', params),
+                'playlist-creator': () => generateDynamicPageContent('playlist-creator', params),
+                'collaborative-playlists': () => generateDynamicPageContent('collaborative-playlists', params),
+                'interactive-demos': () => generateDynamicPageContent('interactive-demos', params),
+                'code-previews': () => generateDynamicPageContent('code-previews', params),
+                'art-showcases': () => generateDynamicPageContent('art-showcases', params),
+                'music-players': () => generateDynamicPageContent('music-players', params),
+                'game-prototypes': () => generateDynamicPageContent('game-prototypes', params),
+                'vr-experiences': () => generateDynamicPageContent('vr-experiences', params)
+            };
+
+            if (pageTemplates[pageId]) {
+                return pageTemplates[pageId]();
+            }
+            
+            return generateDynamicPageContent(pageId, params);
+        }
+
+        /* @tweakable page definitions for dynamic navigation */
+        const PAGES = {
+            discover: {
+                title: 'Discover - YourSpace Labs',
+                template: 'discoverPage'
+            },
+            create: {
+                title: 'Create - YourSpace Labs', 
+                template: 'createPage'
+            },
+            learn: {
+                title: 'Learn - YourSpace Labs',
+                template: 'learnPage'
+            },
+            collaborate: {
+                title: 'Collaborate - YourSpace Labs',
+                template: 'collaboratePage'
+            },
+            monetize: {
+                title: 'Monetize - YourSpace Labs',
+                template: 'monetizePage'
+            },
+            profile: {
+                title: 'Profile - YourSpace Labs',
+                template: 'profilePage'
+            },
+            gallery3d: {
+                title: '3D Gallery - YourSpace Labs',
+                template: 'gallery3dPage'
+            },
+            live: {
+                title: 'Live Sessions - YourSpace Labs',
+                template: 'livePage'
+            },
+            remix: {
+                title: 'Remix Studio - YourSpace Labs',
+                template: 'remixPage'
+            },
+            playlist: {
+                title: 'Playlists - YourSpace Labs',
+                template: 'playlistPage'
+            },
+            demo: {
+                title: 'Demo Zone - YourSpace Labs',
+                template: 'demoPage'
+            },
+            events: {
+                title: 'Events - YourSpace Labs',
+                template: 'eventsPage'
+            },
+            share: {
+                title: 'Share Hub - YourSpace Labs',
+                template: 'sharePage'
+            },
+            commission: {
+                title: 'Commissions - YourSpace Labs',
+                template: 'commissionPage'
+            },
+            code: {
+                title: 'Code Lab - YourSpace Labs',
+                template: 'codePage'
+            },
+            shop: {
+                title: 'Creator Shop - YourSpace Labs',
+                template: 'shopPage'
+            },
+            settings: {
+                title: 'Settings - YourSpace Labs',
+                template: 'settingsPage'
+            },
+            help: {
+                title: 'Help Center - YourSpace Labs',
+                template: 'helpPage'
+            },
+            trending: {
+                title: 'Trending - YourSpace Labs',
+                template: 'trendingPage'
+            },
+            'live-session': {
+                title: 'Live Session - YourSpace Labs',
+                template: 'liveSessionPage'
+            },
+            applications: {
+                title: 'Applications - YourSpace Labs',
+                template: 'applicationsPage'
+            },
+            details: {
+                title: 'Details - YourSpace Labs',
+                template: 'detailsPage'
+            },
+            explore: {
+                title: 'Explore - YourSpace Labs',
+                template: 'explorePage'
+            }
+        };
+
+        /* @tweakable page content generation functions */
+        function generateDiscoverPage(params = {}) {
+            return `
+                <div style="padding: 2rem; max-width: 1400px; margin: 0 auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h1 style="color: var(--secondary-cyan); font-size: 2.5rem;">Discover Amazing Creators</h1>
+                        <button onclick="navigateHome()" style="background: var(--primary-neon); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">← Back Home</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                        <div style="background: rgba(26, 26, 46, 0.8); border-radius: 15px; padding: 2rem; border: 1px solid var(--secondary-cyan);">
+                            <h3 style="color: var(--secondary-cyan); margin-bottom: 1rem;">🎨 Visual Artists</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 1rem;">Discover stunning digital art, illustrations, and experimental visuals from creators worldwide.</p>
+                            <button onclick="navigateTo('create')" style="background: var(--secondary-cyan); border: none; padding: 1rem 2rem; border-radius: 15px; color: black; cursor: pointer;">Explore Art</button>
+                        </div>
+                        <div style="background: rgba(26, 26, 46, 0.8); border-radius: 15px; padding: 2rem; border: 1px solid var(--accent-purple);">
+                            <h3 style="color: var(--accent-purple); margin-bottom: 1rem;">🎵 Musicians</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 1rem;">Listen to original tracks, remixes, and collaborative music projects from independent artists.</p>
+                            <button onclick="navigateTo('playlist')" style="background: var(--accent-purple); border: none; padding: 1rem 2rem; border-radius: 15px; color: white; cursor: pointer;">Listen Now</button>
+                        </div>
+                        <div style="background: rgba(26, 26, 46, 0.8); border-radius: 15px; padding: 2rem; border: 1px solid var(--success-green);">
+                            <h3 style="color: var(--success-green); margin-bottom: 1rem;">💻 Developers</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 1rem;">Explore interactive projects, open source code, and innovative web applications.</p>
+                            <button onclick="navigateTo('code')" style="background: var(--success-green); border: none; padding: 1rem 2rem; border-radius: 15px; color: white; cursor: pointer;">View Code</button>
+                        </div>
+                    </div>
+                    <div style="background: rgba(26, 26, 46, 0.6); border-radius: 20px; padding: 2rem; border: 1px solid var(--primary-neon);">
+                        <h2 style="color: var(--primary-neon); margin-bottom: 2rem;">Trending This Week</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                            <div style="background: rgba(16, 16, 24, 0.8); border-radius: 10px; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.1);">
+                                <h4>Synthwave Dreams</h4>
+                                <p style="color: var(--text-muted); font-size: 0.9rem;">By CyberMusicist</p>
+                                <div style="margin: 1rem 0; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;"><div style="width: 70%; height: 100%; background: var(--secondary-cyan); border-radius: 2px;"></div></div>
+                                <button onclick="navigateTo('demo')" style="background: var(--primary-neon); border: none; padding: 0.5rem 1rem; border-radius: 10px; color: white; cursor: pointer;">Experience</button>
+                            </div>
+                            <div style="background: rgba(16, 16, 24, 0.8); border-radius: 10px; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.1);">
+                                <h4>Neon Gallery</h4>
+                                <p style="color: var(--text-muted); font-size: 0.9rem;">By NeonDreamer</p>
+                                <div style="margin: 1rem 0; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px;"><div style="width: 85%; height: 100%; background: var(--accent-purple); border-radius: 2px;"></div></div>
+                                <button onclick="navigateTo('gallery3d')" style="background: var(--accent-purple); border: none; padding: 0.5rem 1rem; border-radius: 10px; color: white; cursor: pointer;">Enter VR</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateCreatePage(params = {}) {
+            return `
+                <div style="padding: 2rem; max-width: 1400px; margin: 0 auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h1 style="color: var(--primary-neon); font-size: 2.5rem;">Creation Studio</h1>
+                        <button onclick="navigateHome()" style="background: var(--primary-neon); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">← Back Home</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                        <div style="background: rgba(26, 26, 46, 0.8); border-radius: 15px; padding: 2rem; border: 1px solid var(--secondary-cyan); text-align: center;">
+                            <i class="fas fa-palette" style="font-size: 3rem; color: var(--secondary-cyan); margin-bottom: 1rem;"></i>
+                            <h3 style="margin-bottom: 1rem;">Visual Art Studio</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Create digital paintings, illustrations, and experimental visual art with AI assistance.</p>
+                            <button onclick="navigateTo('demo')" style="background: var(--secondary-cyan); border: none; padding: 1rem 2rem; border-radius: 15px; color: black; cursor: pointer;">Start Creating</button>
+                        </div>
+                        <div style="background: rgba(26, 26, 46, 0.8); border-radius: 15px; padding: 2rem; border: 1px solid var(--accent-purple); text-align: center;">
+                            <i class="fas fa-music" style="font-size: 3rem; color: var(--accent-purple); margin-bottom: 1rem;"></i>
+                            <h3 style="margin-bottom: 1rem;">Music Production</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Compose, mix, and master tracks with collaborative tools and AI-powered instruments.</p>
+                            <button onclick="navigateTo('remix')" style="background: var(--accent-purple); border: none; padding: 1rem 2rem; border-radius: 15px; color: white; cursor: pointer;">Make Music</button>
+                        </div>
+                        <div style="background: rgba(26, 26, 46, 0.8); border-radius: 15px; padding: 2rem; border: 1px solid var(--success-green); text-align: center;">
+                            <i class="fas fa-code" style="font-size: 3rem; color: var(--success-green); margin-bottom: 1rem;"></i>
+                            <h3 style="margin-bottom: 1rem;">Code Editor</h3>
+                            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Build web apps, games, and interactive experiences with real-time collaboration.</p>
+                            <button onclick="navigateTo('code')" style="background: var(--success-green); border: none; padding: 1rem 2rem; border-radius: 15px; color: white; cursor: pointer;">Start Coding</button>
+                        </div>
+                    </div>
+                    <div style="background: rgba(26, 26, 46, 0.6); border-radius: 20px; padding: 2rem; border: 1px solid var(--primary-neon);">
+                        <h2 style="color: var(--primary-neon); margin-bottom: 2rem;">AI Creative Assistant</h2>
+                        <div style="background: linear-gradient(45deg, rgba(139,92,246,0.1), rgba(0,255,255,0.1)); border-radius: 15px; padding: 2rem; border: 1px solid var(--accent-purple);">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                <i class="fas fa-robot" style="font-size: 2rem; color: var(--accent-purple);"></i>
+                                <span style="font-size: 1.5rem; font-weight: bold;">Creative AI Partner</span>
+                            </div>
+                            <p style="color: var(--text-muted); margin-bottom: 2rem;">Get personalized suggestions, generate ideas, and receive real-time feedback on your creative projects.</p>
+                            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                                <button onclick="navigateTo('learn')" style="background: var(--accent-purple); border: none; padding: 0.8rem 1.5rem; border-radius: 15px; color: white; cursor: pointer;">Start AI Session</button>
+                                <button onclick="navigateTo('collaborate')" style="background: var(--secondary-cyan); border: none; padding: 0.8rem 1.5rem; border-radius: 15px; color: black; cursor: pointer;">Collaborative AI</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateLearnPage(params = {}) {
+            return `
+                <div style="padding: 2rem; max-width: 1400px; margin: 0 auto;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h1 style="color: var(--success-green); font-size: 2.5rem;">Creative Learning Hub</h1>
+                        <button onclick="navigateHome()" style="background: var(--primary-neon); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">← Back Home</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-bottom: 3rem;">
+                        <div style="background: rgba(26, 26, 46, 0.8); border-radius: 15px; padding: 2rem; border: 1px solid var(--success-green);">
+                            <h3 style="color: var(--success-green); margin-bottom: 1.5rem;">Learning Paths</h3>
+                            <div style="space-y: 1rem;">
+                                <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem; border-left: 3px solid var(--success-green);">
+                                    <h4>Digital Art Fundamentals</h4>
+                                    <p style="color: var(--text-muted); font-size: 0.9rem;">12 lessons • Beginner</p>
+                                    <div style="margin: 0.5rem 0; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;"><div style="width: 30%; height: 100%; background: var(--success-green); border-radius: 3px;"></div></div>
+                                </div>
+                                <div style="background: rgba(139, 92, 246, 0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem; border-left: 3px solid var(--accent-purple);">
+                                    <h4>Music Production Basics</h4>
+                                    <p style="color: var(--text-muted); font-size: 0.9rem;">8 lessons • Beginner</p>
+                                    <div style="margin: 0.5rem 0; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;"><div style="width: 60%; height: 100%; background: var(--accent-purple); border-radius: 3px;"></div></div>
+                                </div>
+                                <div style="background: rgba(0, 255, 255, 0.1); padding: 1rem; border-radius: 10px; margin-bottom: 1rem; border-left: 3px solid var(--secondary-cyan);">
+                                    <h4>Web Development</h4>
+                                    <p style="color: var(--text-muted); font-size: 0.9rem;">15 lessons • Intermediate</p>
+                                    <div style="margin: 0.5rem 0; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px;"><div style="width: 80%; height: 100%; background: var(--secondary-cyan); border-radius: 3px;"></div></div>
+                                </div>
+                            </div>
+                            <button onclick="navigateTo('create')" style="background: var(--success-green); border: none; padding: 1rem 2rem; border-radius: 15px; color: white; cursor: pointer; width: 100%; margin-top: 1.5rem;">Start Learning</button>
+                        </div>
+                        <div style="background: rgba(26, 26, 46, 0.8); border-radius: 15px; padding: 2rem; border: 1px solid var(--secondary-cyan);">
+                            <h3 style="color: var(--secondary-cyan); margin-bottom: 1.5rem;">Live Workshops & Mentorship</h3>
+                            <div style="background: rgba(0, 255, 255, 0.1); padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem; border: 1px solid var(--secondary-cyan);">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                                    <h4>Advanced Glitch Art Techniques</h4>
+                                    <span style="background: var(--primary-neon); padding: 0.3rem 0.8rem; border-radius: 10px; font-size: 0.8rem;">LIVE</span>
+                                </div>
+                                <p style="color: var(--text-muted); margin-bottom: 1rem;">Join digital artist NeonDreamer for an exclusive workshop on creating dynamic glitch effects.</p>
+                                <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                                    <span style="color: var(--secondary-cyan);"><i class="fas fa-calendar"></i> Today 6:00 PM</span>
+                                    <span style="color: var(--accent-purple);"><i class="fas fa-users"></i> 12/20 spots</span>
+                                </div>
+                                <button onclick="navigateTo('events')" style="background: var(--secondary-cyan); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; color: black; cursor: pointer;">Join Workshop</button>
+                            </div>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                                <div style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 10px; text-center;">
+                                    <i class="fas fa-graduation-cap" style="font-size: 1.5rem; color: var(--success-green); margin-bottom: 0.5rem;"></i>
+                                    <h5>Skill Certificates</h5>
+                                    <p style="color: var(--text-muted); font-size: 0.8rem;">Earn verifiable credentials</p>
+                                </div>
+                                <div style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 10px; text-center;">
+                                    <i class="fas fa-handshake" style="font-size: 1.5rem; color: var(--accent-purple); margin-bottom: 0.5rem;"></i>
+                                    <h5>1:1 Mentorship</h5>
+                                    <p style="color: var(--text-muted); font-size: 0.8rem;">Personal guidance from pros</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background: rgba(26, 26, 46, 0.6); border-radius: 20px; padding: 2rem; border: 1px solid var(--primary-neon);">
+                        <h2 style="color: var(--primary-neon); margin-bottom: 2rem;">Community Challenges</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                            <div style="background: linear-gradient(135deg, rgba(255,0,128,0.1), rgba(139,92,246,0.1)); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--primary-neon); cursor: pointer;" onclick="navigateTo('shop', {type: 'challenge'})">
+                                <h4>30-Day Art Challenge</h4>
+                                <p style="color: var(--text-muted); margin: 1rem 0;">Create and share one piece daily. Build consistency and connect with fellow artists.</p>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                                    <span style="color: var(--secondary-cyan);">Day 12/30</span>
+                                    <span style="color: var(--success-green);">847 participants</span>
+                                </div>
+                                <button onclick="navigateTo('collaborate')" style="background: var(--primary-neon); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; color: white; cursor: pointer;">Join Challenge</button>
+                            </div>
+                            <div style="background: linear-gradient(135deg, rgba(0,255,255,0.1), rgba(16,185,129,0.1)); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--secondary-cyan); cursor: pointer;" onclick="navigateTo('code', {type: 'code-challenge'})">
+                                <h4>Code & Coffee</h4>
+                                <p style="color: var(--text-muted); margin: 1rem 0;">Weekly coding sessions with coffee chats. Learn together and build connections.</p>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                                    <span style="color: var(--secondary-cyan);">Every Friday</span>
+                                    <span style="color: var(--success-green);">234 members</span>
+                                </div>
+                                <button onclick="navigateTo('code')" style="background: var(--secondary-cyan); border: none; padding: 0.8rem 1.5rem; border-radius: 10px; color: black; cursor: pointer;">Join Sessions</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateDefaultPage(pageId, params = {}) {
+            const pageTitle = pageId.charAt(0).toUpperCase() + pageId.slice(1);
+            return `
+                <div style="padding: 2rem; max-width: 1400px; margin: 0 auto; text-align: center;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <h1 style="color: var(--primary-neon); font-size: 2.5rem;">${pageTitle}</h1>
+                        <button onclick="navigateHome()" style="background: var(--primary-neon); border: none; padding: 0.8rem 1.5rem; border-radius: 25px; color: white; cursor: pointer;">← Back Home</button>
+                    </div>
+                    <div style="background: rgba(26, 26, 46, 0.8); border-radius: 20px; padding: 3rem; border: 1px solid var(--primary-neon);">
+                        <i class="fas fa-rocket" style="font-size: 3rem; color: var(--primary-neon); margin-bottom: 1rem;"></i>
+                        <h2 style="margin-bottom: 1rem;">Welcome to ${pageTitle}!</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 2rem;">This is your dedicated space for ${pageTitle.toLowerCase()}. Choose from the options below to continue your creative journey.</p>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                            <button onclick="navigateTo('create')" style="background: var(--secondary-cyan); border: none; padding: 1.2rem 2rem; border-radius: 15px; color: black; cursor: pointer;">Create Content</button>
+                            <button onclick="navigateTo('discover')" style="background: var(--accent-purple); border: none; padding: 1.2rem 2rem; border-radius: 15px; color: white; cursor: pointer;">Explore More</button>
+                            <button onclick="navigateTo('collaborate')" style="background: var(--success-green); border: none; padding: 1.2rem 2rem; border-radius: 15px; color: white; cursor: pointer;">Collaborate</button>
+                            <button onclick="navigateTo('profile')" style="background: var(--primary-neon); border: none; padding: 1.2rem 2rem; border-radius: 15px; color: white; cursor: pointer;">View Profile</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        /* @tweakable subscription and tip handling functions */
+        function handleSubscription() {
+            alert('Subscription feature coming soon! This will integrate with Stripe for monthly support.');
+        }
+
+        function handleTipping(button) {
+            const amount = button.getAttribute('data-amount') || button.textContent.replace('$', '');
+            alert(`Tip jar activated! Would tip $${amount} (integration with payment processor coming soon)`);
+        }
+    </script>
+</body>
+</html>
