@@ -24,6 +24,7 @@ This project includes a rich set of features, demonstrating a robust and intelli
 *   **Intelligent Supervisor Agent:**
     *   Uses an **Expectimax algorithm** (`supervisor_agent/expectimax_agent.py`) to make nuanced decisions about whether to `ALLOW`, `WARN`, `CORRECT`, or `ESCALATE` an agent's output. This is not based on simple rules, but on a probabilistic model of future outcomes.
     *   The decision-making is based on a weighted evaluation of the agent's state, including output quality, task drift, error count, and resource usage.
+    *   **Technical Deep Dive**: The utility function $U(s, a)$ calculates the expected value of a supervisor action $a$ in state $s$ by summing the probabilities of transition to future states $s'$ multiplied by their intrinsic reward. This allows the supervisor to allow minor errors if the probability of self-correction is high, optimizing for autonomy.
 
 *   **Code-Aware Supervision:**
     *   The supervisor can now understand code quality. When an agent produces Python code, the system uses the **`pylint` static analysis tool** (`analysis/code_analyzer.py`) to check for errors, code smells, and style issues.
@@ -42,7 +43,7 @@ This project includes a rich set of features, demonstrating a robust and intelli
 *   **Autonomous Orchestrator with Multi-LLM Support:**
     *   Manages a pool of specialized agents with different capabilities.
     *   Features an **LLM-powered task planner**. The system is architected to use multiple LLM providers concurrently (e.g., Anthropic, OpenAI), loading its configuration from `config/llm_config.json`.
-    *   Different models can be used for different tasks (e.g., a fast model for planning, a powerful model for judging) to optimize for cost and performance.
+    *   **Multi-LLM Management**: Seamlessly switches between providers (Anthropic, OpenAI, Groq) based on cost, latency, and context-window requirements. Fast models (e.g., GPT-4o-mini) are used for routine planning, while high-reasoning models (e.g., Claude 3.5 Sonnet) are reserved for auditing and complex task decomposition.
 
 *   **Sub-Orchestration:**
     *   For extremely complex goals, the main orchestrator can now delegate tasks to **sub-projects**. The LLM planner is instructed to identify tasks that are themselves large projects and assign them a `sub_orchestration` capability.

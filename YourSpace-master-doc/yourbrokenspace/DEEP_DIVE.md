@@ -1,5 +1,12 @@
 # Deep Dive: yourbrokenspace
 
+## 🎭 Specialized AI Flows
+This module contains the library of "Flows"—autonomous, specialized AI workflows designed for specific creative tasks.
+- **Lyric Studio & Lyrics Generator**: (Confirmed in `app/lyric-studio`) — Tools for generating song lyrics based on genre, mood, and "vibe" parameters.
+- **DJ Commentary**: Generates real-time, vibe-aware commentary to accompany music streams, enhancing the "live" feel of automated broadcasts.
+- **Quest Generator**: (Confirmed in `app/arcade`) — Creates interactive, narrative-driven quests for the platform's virtual room arcades.
+- **Vibe Tagging**: (Confirmed in `app/vibe-tagging`) — Uses multi-modal analysis to automatically tag content with emotional and aesthetic "vibes".
+
 ## Project Structure
 ```
 temp_repos/yourbrokenspace
@@ -88,29 +95,4 @@ temp_repos/yourbrokenspace/app/arcade
 temp_repos/yourbrokenspace/app/subscriptions
 temp_repos/yourbrokenspace/app/notifications
 temp_repos/yourbrokenspace/app/event-planner
-```
-
-## Tech Stack (package.json)
-```json
-{
-  "scripts": {
-    "test": "node_modules/.bin/vitest",
-    "test:watch": "node_modules/.bin/vitest --watch",
-    "test:ci": "node_modules/.bin/vitest run --coverage"
-  },
-  "dependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "zod": "^4.1.5"
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^6.8.0",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/user-event": "^14.6.1",
-    "@vitest/coverage-v8": "^3.2.4",
-    "jsdom": "^26.1.0",
-    "vitest": "^3.2.4",
-    "whatwg-url": "^14.2.0"
-  }
-}
 ```
