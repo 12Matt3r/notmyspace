@@ -1,5 +1,11 @@
 # Deep Dive: YourSpace
 
+## 🏛️ Early Feature Prototypes
+This module represents the foundational phase of the YourSpace platform, containing early implementations of key features that were later refined and modularized.
+- **Mentor AI**: (Confirmed in `mentor-ai.js`) An early implementation of the AI mentorship flow, providing personalized guidance to creators and students.
+- **Bedroom Hub**: (Confirmed in `bedroom-hub.js`) The initial prototype of the "Home Base" virtual room concept, featuring a modular layout for content display and social interaction.
+- **Swipe Portal**: (Confirmed in `swipe-portal.js`) An experimental navigation system for quick, gesture-based transitions between different creator spaces.
+
 ## Project Structure
 ```
 temp_repos/YourSpace
